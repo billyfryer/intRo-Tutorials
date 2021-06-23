@@ -103,7 +103,8 @@ lahmanB <- Batting %>% select(c(playerID, yearID, G:H, RBI, HR))
 # The select() function is from the dplyr package in tidyverse. It allows you
 # To select certain variables for analysis.
 
-lahmanP <- People %>% select(playerID, nameFirst, nameLast) %>% mutate(name = paste(nameFirst, nameLast))
+lahmanP <- People %>% select(playerID, nameFirst, nameLast) %>% 
+                      mutate(name = paste(nameFirst, nameLast))
 # The mutate function allows you to add columns to a data frame.
 # The paste function allows you to concatenate strings together with a space between words
 
@@ -119,7 +120,8 @@ lahmanBig <- lahmanBig %>% select(name, playerID, everything())
 # The everything function gets all other variables in the same order.
 # The everything function is restricted in when it can be used.
 
-lahmanHR <- lahmanBig %>% filter(HR >= 30) %>% arrange(desc(HR), RBI, name)
+lahmanHR <- lahmanBig %>% filter(HR >= 30) %>% 
+                          arrange(desc(HR), RBI, name)
 # filter limits data to only a certain characteristic
 
 # arrange sorts the data in the order of variables listed
