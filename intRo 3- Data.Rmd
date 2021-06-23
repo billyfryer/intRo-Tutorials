@@ -1,0 +1,129 @@
+---
+title: "intRo 3"
+subtitle: "Sports Data"
+author: "Billy Fryer with inspiration from Brendan Kent, Graham Pash, and Jason Thompson"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+# General Notes:
+
+You should treat this more like a reference guide as to where to find sports analytics data. I am not diving deeply into any of these sources, only giving them to you as something to explore on your own. However, there are parts of this instructional that are universally useful, such as reading in data or some basic web scraping.
+
+# Reading in CSVs
+
+There are many ways to read in data sets. We are going to focus on CSVs since that is one of the most common data types found. CSV stands for Comma Separated Values. This means all data has commas between it. 
+
+## Tidyverse Method (read_csv())
+
+Using the read_csv() function is probably the easiest way to read in a csv. See code below
+
+```{r read_csv}
+library(tidyverse)
+kenpom1 <- read_csv("C:\\Users\\billy\\OneDrive\\Desktop\\Sports Analytics\\intRo Tutorials\\intRo 3 Data\\kenpom_2019-02-11.csv")
+```
+
+There are other options to specify if data is missing and other unusual things. To learn more, look at the R Documentation.
+
+## Base R Method (read.table())
+
+The read.table() method is much more flexible for reading in data. It comes in Base R which means you do not have to import any packages to read the data (though you'll probably have tidyverse in anyways).
+
+One of the ways read.table() allows for flexibility is that is allows you to specify separators, using the sep = option. The header = option is for when the first row of your data set is the names of your columns.Example Below:
+
+```{r read.table}
+kenpom2 <- read.table(file = "C:\\Users\\billy\\OneDrive\\Desktop\\Sports Analytics\\intRo Tutorials\\intRo 3 Data\\kenpom_2019-02-11.csv", header = TRUE, sep = ",")
+```
+
+Same as before, there are other options to specify if data is missing and other unusual things. To learn more, look at the R Documentation.
+
+\newpage
+
+# Basics of Web Scraping
+
+Web Scraping is a topic that seems big and scary, but actually isn't as bad as one would think. Web Scraping is pulling data from the Internet so it can be used in a functional form. It is an individualized process however, meaning that you have to change the way you do it for every individual website. The example here is for the Kenpom website front page, one of the best sources for men's college basketball information
+
+```{r webscraping}
+library(rvest)
+
+
+url <- "https://kenpom.com/"
+url %>% read_html() %>% html_table() -> df
+df <- df[[1]] # only want the first (main) table
+
+colnames(df) <- df[1,] # Assigning the first row as the headers
+df <- df[-1,] # Drops 1st row from data frame
+df <- df[!is.na(as.numeric(df$Rk)),] # drop column name rows
+row.names(df) <- 1:nrow(df) # makes rownames the numbers 1:number of rows
+
+# handle duplicate column names by renaming everything
+colnames(df) <- c('Rk','Team','Conf','W-L','AdjEM','AdjO','AdjO_Rk','AdjD','AdjD_Rk', 'AdjT','AdjT_Rk','Luck','Luck_Rk','OppAdjEM','OppAdjEM_Rk', 'OppO','OppO_Rk','OppD','OppD_Rk','NCAdjEM','NCAdjEM_Rk')
+
+# subset only useful variables
+df <- df %>% select(c('Rk','Team','Conf','W-L','AdjEM','AdjO','AdjD','AdjT','Luck', 'OppAdjEM','OppO','OppD','NCAdjEM'))
+
+```
+
+We can go much more in depth about web scraping, but that would get very time consuming. It would be a better use of our time to look at data that is eas(ier) to get to.
+
+# Packages with Good Sports Data
+
+I want to give credit to Brendan Kent's Website https://brendankent.com for the majority of these R packages mentioned. For a link to this specific article, check out https://brendankent.com/2021/03/09/free-sports-data-sources/.
+
+One of the unique things about R is that anyone can create a package and share it with others for public use on Github. Github is a code sharing platform that we will discuss more about in a future meeting. For now, we will learn how to get packages off of Github by using the devtools package.
+
+```{r devtools}
+# Install and load devtools package
+#install.packages("devtools")
+library(devtools)
+
+# Use the devtools function install_github to install packages from github
+#install_github("lbenz730/ncaahoopR")
+
+library(ncaahoopR) # Then load it just as you would any other package
+```
+
+If this is not working, look and see if your packages need updating. To do this, click on the packages tab on the right side of the screen and then click Update.
+
+We will now discuss packages by sports. If any of these sound interesting to you, just look them up to see documentation and how to download them!
+
+**Just a side note: There are a lot of puns using R in the names of packages. You have been warned.**
+
+## American Football
+
+* nflscrapR  
+* nflfastR  
+* NFLSimulatoR  
+* cfbscrapR  
+
+## Basketball
+
+* nbastatR  
+* ncaahoopR  (Note: This one is very slowly fading out)
+* hoopR
+* wncaahoopR  
+* wehoop  
+* airball  
+
+## Baseball
+
+* baseballr  
+* Lahman (Note: this is not on github, it is built directly into R)
+
+## Soccer
+
+* socceR  
+* footballR  
+* ggsoccer  
+* worldfootballR  
+* tyrone_mings  
+
+
+For sports, I again point you to Brendan Kent's article https://brendankent.com/2021/03/09/free-sports-data-sources/. More sports are included there as well as websites you could possible scrape from.
+
+# Conclusion
+
+As usual, this is only an introduction to sports data in R. There are also many more websites and packages that could be listed here. Many thanks again to Brendan Kent (Twitter: @brendankent, @MeasurablesPod), Graham Pash (Twitter: @gtpash), and Jason Thompson (Twitter: @jason24thompson) for allowing me to use some of their stuff.
