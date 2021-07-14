@@ -10,8 +10,8 @@ intRo 3- Data.Rmd: This 1st half of the tutorial describes how to read in data a
 
 intRo 4- Modeling.R: This tutorial walks readers through fitting a Least Squares Regression modeling problem using the Lahman Datasets. This tutorial also goes through plotting the regression model in base R and using the ggplot2 package.
 
+intRo 5- Sharing.R: This tutorial is about sharing your code and graphics. This takes users through the basicsof using Github and also provides some tips on sharing your graphics on Twitter.
+
 I want to give a special thanks to Graham Pash and Jason Thompson for creating the original intRo tutorial whose contents are spread throughout the tutorials.
 
-A 5th Tutorial is in the works centering around collaboration specifically good coding practices and sharing code on Github. It will be completed before Summer 2021 is finished!
-
-README Last Updates: 6/24/2021
+README Last Updates: 7/13/2021
