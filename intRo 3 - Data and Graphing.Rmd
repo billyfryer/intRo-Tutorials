@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 
 # Reading in CSVs
 
-There are many ways to read in data sets. We are going to focus on CSVs since that is one of the most common data types found. CSV stands for Comma Separated Values. This means all data has commas between it. 
+There are many ways to read in data sets. We are going to focus on CSVs since that is one of the most common data types found. CSV stands for Comma Separated Values. This that the data is *delimited* or seperated with commas. These will eventually make up our columns.
 
 ## Tidyverse Method (read_csv())
 
