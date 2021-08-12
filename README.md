@@ -14,4 +14,4 @@ intRo 5- Sharing.R: This tutorial is about sharing your code and graphics. This 
 
 I want to give a special thanks to Graham Pash and Jason Thompson for creating the original intRo tutorial whose contents are spread throughout the tutorials.
 
-README Last Updates: 7/21/2021
+README Last Updates: 8/12/2021
