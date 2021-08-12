@@ -25,6 +25,9 @@ library(tidyverse)
 # when loading them and where new files will be outputted to
 setwd("C:/Users/billy/OneDrive/Desktop/Sports Analytics/intRo Tutorials/intRo 3 Data and Graphing")
 
+# A Better way of taking care of this would be with
+# an R Project, which will not be covered.
+
 kenpom1 <- read_csv("kenpom_2019-02-11.csv")
 ```
 
@@ -164,9 +167,9 @@ luck_plot <- ggplot(df, aes(x = Luck)) +
 To add a title, subtitle, and caption use the `labs()` function.
 ```{r Graphing Example 3}
 luck_plot <- luck_plot +
-  labs(title = "Luckiest Teams",
+  labs(title = "NCAA Basketball Luck",
        subtitle = "Current NCAA MBB Season",
-       caption = "Data from kenpom.com | Graphic by Sports Analytics Club at NC State")
+       caption = "Viz by Billy Fryer (@_b4billy_) ~ Data from kenpom.com")
 
 print(luck_plot)
 ```
@@ -175,7 +178,11 @@ If we want a density curve around the histogram, that's easy too. We can even ch
 
 ```{r Graphing Example 4}
 luck_plot <- luck_plot +
-  geom_density(color = "red")
+  # Add a Red Density curve
+  geom_density(color = "red") +
+  # Center Title and subtitle
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
 
 print(luck_plot)
 
@@ -183,6 +190,61 @@ print(luck_plot)
 ```
 
 The ggplot2 package is one of the best packages in R and there are tons of resources that one can learn more about it. For more information, search "ggplot2 cheat sheet" which gives more information about available plots in the package or "Tidy Tuesday" which is a R Community initiative to teach others about manipulating data with the `Tidyverse` package and plotting with `ggplot2`.
+
+# Graphing in Groups
+
+There may be times where you want to group objects together and perform analysis on that. This is very useful when doing analysis where players may be represented in different rows, such as a pitch by pitch analysis in baseball. We will use the same data frame to group by Conference.
+
+```{r Grouping Graph 1}
+# Make a copy of df and call it df_by_conference
+df_by_conference <- df
+
+df_by_conference <- df_by_conference %>% 
+  # Group By Conference
+  group_by(Conf) %>% 
+  # Summarize Statistics
+  summarize( # Find Mean Rank by Conference
+            Rk = mean(Rk, na.rm = TRUE),
+            # Find Mean AdjO by Conference
+            AdjO = mean(AdjO, na.rm = TRUE)) %>% 
+  # Can't forget to Ungroup!
+  ungroup() %>% 
+  # Add a Power 6 Column
+  # ACC, SEC BIG 10, BIG 12, BIG EAST
+  mutate(Power6 = case_when(Conf %in% c("ACC", "SEC", "B10", "B12", "BE", "P12") ~ "Power Conference",
+                            TRUE ~ "Non-Power Conference"))
+
+# Make Power6 a factor variable
+df_by_conference$Power6 <- factor(df_by_conference$Power6)
+```
+
+Now that we have a new data set, it's time to graph it!
+```{r Grouping Graph 2}
+# Give the df name then the x and y coordinates
+ggplot(df_by_conference, aes(x = AdjO,
+                             y = Rk)) +
+  # We want to color by whether or not they 
+  # are a Power Conference, so we use the color = option
+  # geom_point() plots data points
+  geom_point(aes(color = Power6)) +
+  # Labels
+  labs(title = "Conferences by Rank and AdjO",
+       # I didn't want to include a Legend Title
+       color = "",
+       y = "Rank", 
+       x = "Adjusted Offensive Efficiency",
+       # Give Credit to Yourself and the Data Source
+       caption = "Viz by Billy Fryer (@_b4billy_) | Data from kenpom.com") +
+  # Centering the title
+  theme(plot.title = element_text(hjust = 0.5)) +
+  # Choosing colors. The # then the letters and numbers
+  # Represents Hex Colors!
+  scale_color_manual(values =  c(
+                    "Power Conference" = "#FF0000",
+                     "Non-Power Conference" = "#000000")
+                    )
+  
+```
 
 # Conclusion
 
