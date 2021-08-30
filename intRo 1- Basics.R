@@ -1,6 +1,6 @@
 # intRo 1
 # Basics
-# Authors: Billy Fryer with inspiration from Graham Pash and Jason Thompson
+# Authors: Billy Fryer with Inspiration from Graham Pash and Jason Thompson
 
 ##############################################################################
 # Data Types
@@ -35,35 +35,31 @@ mixedvec <- c(1:4,"Wolfpack")
 print(mixedvec)
 class(mixedvec)
 
-# We CAN mix variable types in a LIST!
-testlist1 <- list(vec1,vec3)
-testlist1[[1]] # reference list elements using DOUBLE brackets
-testlist1[[2]]
+#' There is another data type called a List that we will not discuss
+#' It CAN hold both numeric and character values in a similar way to 
+#' vectors. But we want to do more interesting things, so we'll move on
+#' for now.
 
-# We can even mix object types in a list - lists just collect things
-testlist2 <- list(24,c("Basketball","Soccer"))
-testlist2[[1]]
-testlist2[[2]]
-
-mat <- matrix(1:12,nrow=4,ncol=3) # this is a MATRIX
+mat <- matrix(1:12, nrow=4, ncol=3) # this is a MATRIX
 mat
 mat[2,3] # extracts item in 2nd ROW, 3rd COLUMN of the matrix
 mat[4,] # extracts the 4th row, ALL columns
 mat[,2] # extracts ALL rows, the 2nd column
 
-df <- data.frame(col1 = 1:25, col2 = 25:1) # this is a data.frame
+# this is a data.frame
+df <- data.frame(Name = c("Tom Brady", "Jackie Robinson", "Kobe Bryant"), 
+                 Number = c(12, 42, 24))
 df
 df[2,2] # You can still access these the same way
 df[2,] # extracts the 2nd row, ALL columns
 df[,2] # extracts ALL rows, the 2nd column
+df$Name # This accesses the Name column
 
 # However, you can do a lot more with Data Frames
 
-df <- rbind(df, c(100,100)) # We can add a row
-df <- cbind(df, col3 = 1:26) # We can add a new column
-df$col3 <- 26:1 # We can reassign columns a lot easier
-df$col4 <- letters[1:26] 
-# We can also make a new column, and it can mix numeric and characters
+df <- rbind(df, c("Rafael Nadal", NA)) # We can add a row
+df <- cbind(df, Sport = c("Football", "Baseball", "Basketball", "Tennis")) # We can add a new column
+df$Country <- c("USA", "USA", "USA", "Spain")  # We can reassign columns a lot easier
 
 ##############################################################################
 # Commenting Your Code
