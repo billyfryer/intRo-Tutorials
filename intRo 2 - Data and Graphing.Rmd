@@ -2,7 +2,9 @@
 title: "intRo 2"
 subtitle: "Data and Graphing"
 author: "Billy Fryer with inspiration from Brendan Kent, Graham Pash, and Jason Thompson"
-output: pdf_document
+output:
+  html_document:
+    code_download: TRUE
 ---
 
 ```{r setup, include=FALSE}
@@ -25,7 +27,7 @@ library(tidyverse)
 # when loading them and where new files will be outputted to
 # This line is commented out because it is already my working directory
 
-# setwd("C:/Users/billy/OneDrive/Desktop/Sports Analytics/intRo Tutorials/intRo 3 Data and Graphing")
+# setwd("C:/Users/billy/OneDrive/Desktop/Sports Analytics/intRo Tutorials/intRo 2 Data and Graphing")
 
 # A Better way of taking care of this would be with
 # an R Project, which will not be covered.
