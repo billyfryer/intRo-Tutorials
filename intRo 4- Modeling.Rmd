@@ -2,7 +2,9 @@
 title: "intRo 4"
 subtitle: "Modeling"
 author: "Billy Fryer"
-output: pdf_document
+output:
+  html_document:
+    code_download: TRUE
 ---
 
 ```{r setup, include=FALSE}
