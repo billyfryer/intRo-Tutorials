@@ -76,3 +76,43 @@ One of the most important things is sharing the work that you create. One of the
 * Make sure to be colorblind friendly in your plots! This includes not mixing reds, greens, and browns that may be easily confused. To make sure your plot isn't colorblind unfriendly, look up colorblind themes on Google.
 
 * Feel free to tag the Sports Analytics Club at NC State on Twitter! We'd love to post cool graphics created by members to share with people that may not be in your current network.
+
+# Example
+
+```{r Graphic}
+# Packages
+library(tidyverse)
+library(Lahman)
+
+# Data Cleaning
+redsox <- Pitching %>% 
+  filter(yearID == 2004) %>% 
+  filter(teamID == "BOS")
+
+# Plotting 1
+boxplot <-
+ggplot(redsox,
+       aes(x = teamID,
+           y = HR)) +
+  geom_boxplot()
+
+print(boxplot)
+
+# Plotting 1
+violin <-
+ggplot(redsox,
+       aes(x = teamID,
+           y = HR)) +
+  geom_violin()
+
+print(violin)
+
+# Adding Labels
+fullplot <- violin +
+  labs(title = "Red Sox Pitchers Homeruns Allowed",
+       subtitle = "2004 World Series Season",
+       caption = "Data Viz by Billy Fryer (@_b4billy_) | Data from Lahman Data Sets")
+  
+print(fullplot)
+
+```
