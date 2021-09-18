@@ -8,7 +8,8 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
+                      eval = FALSE)
 ```
 
 # Reading in CSVs
@@ -62,25 +63,37 @@ library(rvest)
 
 url <- "https://kenpom.com/"
 url %>% read_html() %>% html_table() -> df
-df <- df[[1]] # only want the first (main) table
+df <- df[[1]]  %>% # only want the first (main) table
+  data.frame()
 
-names(df) <- df[1,] # Assigning the first row as the headers
+names(df) <- df[1,] %>% as.character # Assigning the first row as the headers
 df <- df[-1,] # Drops 1st row from data frame
+
+# There are some random blank rows in the dataframe
 df <- df[!is.na(as.numeric(df$Rk)),] # drop column name rows
 row.names(df) <- 1:nrow(df) # makes rownames the numbers 1:number of rows
 
 # handle duplicate column names by renaming everything
-names(df) <- c('Rk','Team','Conf','W-L','AdjEM','AdjO','AdjO_Rk','AdjD','AdjD_Rk', 'AdjT','AdjT_Rk','Luck','Luck_Rk','OppAdjEM','OppAdjEM_Rk', 'OppO','OppO_Rk','OppD','OppD_Rk','NCAdjEM','NCAdjEM_Rk')
+names(df) <- c('Rk','Team','Conf','W_L','AdjEM','AdjO','AdjO_Rk','AdjD','AdjD_Rk', 'AdjT','AdjT_Rk','Luck','Luck_Rk','OppAdjEM','OppAdjEM_Rk', 'OppO','OppO_Rk','OppD','OppD_Rk','NCAdjEM','NCAdjEM_Rk')
 
 # subset only useful variables
-df <- df %>% select(c('Rk','Team','Conf','W-L','AdjEM','AdjO','AdjD','AdjT','Luck', 'OppAdjEM','OppO','OppD','NCAdjEM'))
+df <- df %>% select(c('Rk','Team','Conf','W_L','AdjEM','AdjO','AdjD','AdjT','Luck', 'OppAdjEM','OppO','OppD','NCAdjEM'))
 
 # Change types to numeric
+
+str(df)
+# We have a bunch of columns that are supposed to be numbers, 
+# But they are character strings. We need to change that.
+
 # This line of code applies the as.numeric() function to column
 # 1 and columns 5 to 13 which makes them usable later. Ideally,
 # We would use more tidyverse functions to make this better, but
 # for now, it will do.
 df[,c(1,5:13)] <- sapply(df[,c(1,5:13)], as.numeric)
+
+# Now let's look at the structure of df
+str(df)
+# Our variables are numbers
 ```
 
 We can go much more in depth about web scraping, but that would get very time consuming. It would be a better use of our time to look at data that is easier to access.
@@ -114,6 +127,7 @@ We will now discuss packages by sports. If any of these sound interesting to you
 * nflfastR
 * NFLSimulatoR
 * cfbscrapR
+* ffsimulator
 
 ## Basketball
 
@@ -167,31 +181,37 @@ ggplot(df, aes(x = Luck)) +
 If we want to add on to a plot, we can do that to! To add layers on to a plot, we put a + between layers. Plots can also be saved to an object which allows us to add on at different times. To see a plot after saving it, wrap it in a `print()` statement.
 
 ```{r Graphing Example 2}
-luck_plot <- ggplot(df, aes(x = Luck)) +
+ggplot(df, aes(x = Luck)) +
   geom_histogram(bins = 40)
+
+luck_plot <- ggplot(df, aes(x = Luck)) +
+              geom_histogram(aes(y = ..density..),
+                                 bins = 40)
 ```
 
 To add a title, subtitle, and caption use the `labs()` function.
 ```{r Graphing Example 3}
-luck_plot <- luck_plot +
+luck_plot2 <- luck_plot +
   labs(title = "NCAA Basketball Luck",
        subtitle = "Current NCAA MBB Season",
        caption = "Viz by Billy Fryer (@_b4billy_) ~ Data from kenpom.com")
 
-print(luck_plot)
+print(luck_plot2)
 ```
 
 If we want a density curve around the histogram, that's easy too. We can even change the color to make it stand out more. Finally, to output the file to your computer, we use the `ggsave()` function
 
 ```{r Graphing Example 4}
-luck_plot <- luck_plot +
+luck_plot3 <- luck_plot2 +
   # Add a Red Density curve
-  geom_density(color = "red") +
+  geom_density(color = "red",
+               fill = "yellow",
+               alpha = .5) +
   # Center Title and subtitle
   theme(plot.title = element_text(hjust = 0.5),
         plot.subtitle = element_text(hjust = 0.5))
 
-print(luck_plot)
+print(luck_plot3)
 
 #ggsave("Luckiest Teams.png", luck_plot)
 ```
@@ -212,8 +232,8 @@ df_by_conference <- df_by_conference %>%
   # Summarize Statistics
   summarize( # Find Mean Rank by Conference
             Rk = mean(Rk, na.rm = TRUE),
-            # Find Mean AdjO by Conference
-            AdjO = mean(AdjO, na.rm = TRUE)) %>% 
+            # Find Mean AdjEM by Conference
+            AdjEM = mean(AdjEM, na.rm = TRUE)) %>% 
   # Can't forget to Ungroup!
   ungroup() %>% 
   # Add a Power 6 Column
@@ -228,18 +248,18 @@ df_by_conference$Power6 <- factor(df_by_conference$Power6)
 Now that we have a new data set, it's time to graph it!
 ```{r Grouping Graph 2}
 # Give the df name then the x and y coordinates
-ggplot(df_by_conference, aes(x = AdjO,
+ggplot(df_by_conference, aes(x = AdjEM,
                              y = Rk)) +
   # We want to color by whether or not they 
   # are a Power Conference, so we use the color = option
   # geom_point() plots data points
   geom_point(aes(color = Power6)) +
   # Labels
-  labs(title = "Conferences by Rank and AdjO",
+  labs(title = "Conferences by Rank and AdjEM",
        # I didn't want to include a Legend Title
        color = "",
        y = "Rank", 
-       x = "Adjusted Offensive Efficiency",
+       x = "Adjusted Efficiency Margin",
        # Give Credit to Yourself and the Data Source
        caption = "Viz by Billy Fryer (@_b4billy_) | Data from kenpom.com") +
   # Centering the title
@@ -255,4 +275,4 @@ ggplot(df_by_conference, aes(x = AdjO,
 
 # Conclusion
 
-As usual, this is only an introduction to sports data in R. There are also many more websites and packages that could be listed here. Many thanks again to Brendan Kent (Twitter: @brendankent, @MeasurablesPod), Graham Pash (Twitter: @gtpash), and Jason Thompson (Twitter: @jason24thompson) for allowing me to use some of their stuff.
+Many thanks again to Brendan Kent (Twitter: @brendankent, @MeasurablesPod), Graham Pash (Twitter: @gtpash), and Jason Thompson (Twitter: @jason24thompson) for allowing me to use some of their stuff. As a recap, we covered how to read in CSVs, some very basic webscraping, and learned more about packages that have sports data. More importantly, we learned how to make graphics in R using the `ggplot2` package.
