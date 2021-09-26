@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduction to Github
 
-Sharing both code and results are super important when doing data analysis of any kind, but especially in sports analytics. In intRo 2, we went over some basics of R Markdown in order to share results with coaches. Now, we want to share our work, specifically the code, with other sports analytics people. This can be to show off all of the hard work we have done or to collaborate with partners on a project by working together. The website most often used for this is github.com. Once you have your code on Github, we will discuss (very briefly) about other places to share your work, namely Twitter.
+Sharing both code and results are super important when doing data analysis of any kind, but especially in sports analytics. In intRo 2, we went over how to make plots and that there are sports data packages on a website called GitHub. Now, it's our turn to share our work, specifically the code, with other sports analytics people. This can be to show off all of the hard work we have done or to collaborate with partners on a project by working together.
 
 This tutorial will be pretty different than the rest of the intRo series because it is not necessarily with R, but instead just a more general coding thing that people should learn.
 
@@ -114,5 +114,4 @@ fullplot <- violin +
        caption = "Data Viz by Billy Fryer (@_b4billy_) | Data from Lahman Data Sets")
   
 print(fullplot)
-
 ```
