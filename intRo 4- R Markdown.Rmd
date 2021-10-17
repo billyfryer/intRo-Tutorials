@@ -1,0 +1,160 @@
+---
+title: "intRo 4"
+subtitle: "R Markdown"
+author: "Billy Fryer"
+output: 
+  html_document:
+    code_download: TRUE
+---
+
+# R Markdown
+
+R Markdown is probably my favorite thing about R Studio. R Markdown files allow you to save your code and output as a readable file such as a pdf, html, a doc and many more. For this tutorial, we will mostly be focusing on the HTML output. Outputting as an HTML file has a few additional benefits over a PDF file. It's also possible to save an HTML file as a PDF as we will discuss later.
+
+# Getting Started
+
+To open a new R Markdown File, click the drop down arrow next to the sheet of paper with the green plus on it in the top left. Then select "R Markdown". To actually make the file after typing the code and plain text, hit the "Knit" Button. This will run all of your code and create the file.
+
+# YAML Heading
+
+The YAML Heading is super important in R Markdown. It is where your global options go and is automatically included when opening a new R Markdown Document. The YAML Heading should always be at the beginning of the R Markdown document. The YAML Heading for this document is pasted below:
+
+---
+title: "intRo 4"
+subtitle: "R Markdown"
+author: "Billy Fryer"
+output: 
+  html_document:
+    code_download: TRUE
+---
+
+The `title` command allows you to create a title for your work. `subtitle`, `author`, and `date` work similarly, When working with a team, dating your work is important so that they know what data is being used. The last section of our YAML Header is for `output` There are several different formats that the output can be. Outputting as a HTML is great because you can always save it to a pdf from there by going to print the html file and then changing your printer to "Save as PDF".
+
+The last line of the YAML heading is optional. The `code_download = TRUE` option allows there to be a little button in the top right of your HTML document that gives the user access to the R Markdown file. This is FALSE by default, but is really cool if you want an easy way for others to access your code. By clicking this button, readers will be able to download the Rmd document that you created.
+
+# Set Up Chunk
+
+The Set Up Chunk normally goes to the very top of the document, but for this example, it has been moved:
+
+```{r setup}
+knitr::opts_chunk$set(echo = TRUE, 
+                      include = TRUE, 
+                      warning = FALSE, 
+                      message = FALSE)
+```
+
+There are several options that one can select in the setup chunk. There functions are explained below:
+
+`echo = TRUE` makes the code appear in the output document. Normally, we want this to be FALSE they don't care about pretty code, they just want results. However, if you do want to show your code, such as this tutorial, this `echo = TRUE` option can be very useful.
+
+`include = TRUE` makes the code chunk is included in the output. Typically, this is marked as FALSE if echo = TRUE or vice versa. This is allows you to hide certain chunks. For example, in the rest of the tutorials, `include = FALSE` for the setup chunk.
+
+`warning = FALSE` cuts off warnings if FALSE or prints them when `warning = TRUE`. Typically this is FALSE because we don't want warnings to show up in our output. However, if we are debugging, turning this on can be useful. If your code will not work, the knitting of the document will not happen, so don't worry about that.
+
+`message = FALSE` is very similar to `warning = FALSE`. This can be used to hide stuff automatically printed to the console. I typically use this for the chunk that includes my libraries. The `library(Tidyverse)` command typically prints out a message that I don't care to see in my output. To hide this message the `message = FALSE` option is used. 
+
+# Formatting
+
+Formatting in R Markdown can take place in a variety of ways from headers to spacing to writing mathematical equations with LaTeX.
+
+## Headings
+
+Headings occur by putting # in front of the text. For whatever level you want, put that many #s and then a space
+
+# This is a First Level Header
+
+Written `# This is a First Level Header`
+
+## This is a Second Level Header
+
+Written `## This is a Second Level Header`
+
+### This is Third Level Header
+
+Written `### This is a Third Level Header`
+
+As you can see, the more hashtags we use, the smaller the header gets.
+
+## Spacing
+
+Spacing in R Markdown is weird. To space between words is normal, just hit the space bar. However, if you want to space between lines it gets more complicated. There are two options: putting two spaces at the end of the line and entering a blank line where you want a line gap.
+
+This is an example of using the two spaces.  
+Now we are on a new line.
+
+I prefer using a blank line in between lines.
+
+It makes your code longer, but it makes it a lot easier to see.
+
+To do a new page, use the `\\newpage` command. You can tell that you typed it correctly because the `\\newpage` command turns a different color in your R Markdown File. The `\\newpage` command was used to insert the page break here.
+
+\newpage
+
+## The \ Character and Writing Equations
+
+The \\ character is a tricky one to deal with. Typically it is used for writing LaTeX commands in R. If for some reason you need to write it (such as writing this tutorial), you would type the character twice for it to print once.
+
+Writing equations in R is a very convenient way to do homework in your statistics classes. You start and end with a \$ and then use LaTeX commands in between. If you don't know how to write in LaTeX, don't worry. Google is very helpful if you search "how to write [character you want] in latex". Sometimes, this also might be the most convenient way to write special characters in R Markdown. An example is below:
+
+$E(Y) = \beta_0 + \beta_1X_1 + \beta_2X_2 + ...+\beta_nX_n$
+
+The above equation was written: `\$E(Y) = \\beta_0 + \\beta_1X_1 + \\beta_2X_2 + ...+\\beta_nX_n\$`
+
+The `\\newpage` command that we learned is also a LaTeX command.
+
+## Text Formatting
+
+You can also Bold or Underline text in R Markdown. To **bold** text, surround the text with ** (Two Asterisks), without a space before the first word of the phrase and without a space after the last word of the phrase. To *italicize* text, do the same thing as bolding, but only use * (One Asterisk). There is currently no good way to underline text in R Markdown.
+
+# Writing Code in R Markdown
+
+This is what makes R Markdown the best: including R Code and Output directly in with Plain text. R Code goes in Code Chunks, which are signified with 3 tick marks \`\`\` (the key above tab and below the esc key on mac and pc). Then you use an open curly bracket { then the name of the language you are using (in our case, r though you can use python or other languages in R Markdown). From there you need to name the code chunk. Typically this name will be descriptive in order to make it easier to find when you let the code sit for a while and then come back to it. Names are technically optional, but named chunks are preferred. When naming your chunks, each chunk needs a distinct name for R Markdown to knit properly regardless of output type. Code chunk names should avoid spaces. Example of appropriate names would be `Figure1A` or `TableForAnalysis`. As you can see, these are not one word phrases, but are still condensed.
+
+From there you close the curly bracket } and then type your code. Coding in the R chunk is the same as coding in a R script. When you are finished with the code, do three more tick marks \`\`\` on a separate line.
+
+Here's an example.
+
+\`\`\`{r sample}
+library(tidyverse) # Pretty Much Always Need Tidyverse!
+library(Lahman) # Bring in Lahman Datasets
+
+lahmanP <- People %>% filter(birthState == "NC") # Only NC Pitchers
+
+lahmanP <- lahmanP %>% select(nameGiven, debut, playerID) # Useful Variables
+
+print(head(lahmanP))
+\`\`\`
+
+\newpage
+
+**Let's actually do this!**
+
+```{r realsample}
+library(tidyverse) # Pretty Much Always Need Tidyverse!
+library(Lahman) # Bring in Lahman Datasets
+
+lahmanP <- People %>% filter(birthState == "NC") # Only NC Pitchers
+
+lahmanP <- lahmanP %>% select(nameGiven, debut) # Useful Variables
+
+head(lahmanP) %>% print() # Print the first few rows
+```
+
+If You want this table to look nicer, you can use the `gt` package!
+
+```{r gt}
+# install.packages("gt")
+library(gt)
+
+lahmanP %>% 
+  head() %>% 
+  gt()
+```
+
+The `gt` package very useful and has a lot more feature that are fun to explore. For more information, look at Thomas Mock's "gt - a (G)rammar of (T)ables" blog post linked here: 
+
+https://themockup.blog/posts/2020-05-16-gt-a-grammer-of-tables/
+
+# Conclusion
+
+There are a lot more things to learn about R Markdown and R in general; these are only the basics! This concludes the intRo tutorial series. Hope you found it helpful and start doing your own analysis!
