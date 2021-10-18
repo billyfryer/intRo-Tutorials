@@ -8,10 +8,8 @@ intRo 2- Data and Graphing.Rmd: This 1st part of the tutorial describes how to r
 
 intRo 3- Sharing.Rmd: This tutorial is about sharing your code and graphics. This takes users through the basics of using Github and also provides some tips on sharing your graphics on Twitter.
 
-intRo 4- Modeling.Rmd: This tutorial walks readers through fitting a Least Squares Regression modeling problem using the Lahman Datasets. This tutorial also goes through plotting the regression model in base R and using the ggplot2 package.
-
-intRo 5- R Markdown.Rmd: This file is an introduction to R Markdown, primarily making PDFs with LaTeX. The tutorial describes text formatting as well as writing code in R Markdown.
+intRo 4- R Markdown.Rmd: This file is an introduction to R Markdown, primarily making PDFs with LaTeX. The tutorial describes text formatting as well as writing code in R Markdown.
 
 I want to give a special thanks to Graham Pash and Jason Thompson for creating the original intRo tutorial whose contents are spread throughout the tutorials.
 
-README Last Updates: 8/12/2021
+README Last Updated: 10/17/2021
