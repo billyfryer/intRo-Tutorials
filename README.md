@@ -1,4 +1,4 @@
-# intRo-Tutorials
+# intRo Tutorials
 
 This is a set of tutorials with the main purpose of teaching the basics of R in the `tidyverse` style as applied to Sports Analytics. The files are originally intended for members of the Sports Analytics Club at NC State so examples are geared towards those purposes. Members participating in the tutorials are expected to be Freshman or those new to programming so some topics are not covered very in depth as meetings are only 1 hour long. This may become very evident to those reading through intRo 3 and 4. 
 
@@ -10,6 +10,8 @@ intRo 3- Sharing.Rmd: This tutorial is about sharing your code and graphics. Thi
 
 intRo 4- R Markdown.Rmd: This file is an introduction to R Markdown, primarily making PDFs with LaTeX. The tutorial describes text formatting as well as writing code in R Markdown.
 
+intRo 5- Modeling.Rmd: This file explains the basics of creating a Linear Model in R using the `lm()` fucntion. Plotting of the model as well as interpretation of coefficients is also covered.
+
 I want to give a special thanks to Graham Pash and Jason Thompson for creating the original intRo tutorial whose contents are spread throughout the tutorials.
 
-README Last Updated: 10/17/2021
+README Last Updated: 10/18/2021
