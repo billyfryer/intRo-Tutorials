@@ -157,4 +157,4 @@ https://themockup.blog/posts/2020-05-16-gt-a-grammer-of-tables/
 
 # Conclusion
 
-There are a lot more things to learn about R Markdown and R in general; these are only the basics! This concludes the intRo tutorial series. Hope you found it helpful and start doing your own analysis!
+There are a lot more things to learn about R Markdown and R in general; these are only the basics!
