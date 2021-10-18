@@ -1,0 +1,132 @@
+---
+title: "intRo 5"
+subtitle: "Modeling"
+author: "Billy Fryer"
+output:
+  html_document:
+    code_download: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+# Introduction
+
+One important thing when looking at data is to be able to fit trends or models to your data. There a a tons of ways and methods to do so depending on what you want to do. In this tutorial, we will go over the basics of fitting a Least Squares Linear Regression Model
+
+# Least Squares Regression Models
+
+When one thinks of Regression, they typically think of Least Squares Regression. This minimizes the sum of square errors (SSE). We will do this by example:
+
+## Idea
+
+Can we model the number of wins a team has based on the number of home runs they hit that season?
+
+## Data Manipulation
+
+This material was covered in the intRo 1 tutorial.
+
+```{r data maniputlation}
+# Import Data Sets
+library(Lahman)
+library(tidyverse)
+
+# Only Select variables we want
+teams <- Teams %>% select(yearID, name, W, L, HR, G, lgID) 
+
+# To keep our analysis consistent, we only included teams that played 
+# a full 162 game season (>= due to playoffs) since 2013 when the 
+# Astros switched to the AL
+
+# We then got reordered columns and got rid of unnecessary columns
+teams <- teams  %>% 
+  filter(G >= 162 & yearID >= 2013 & yearID <= 2019) %>% 
+  select(name, everything()) %>% 
+  select(-G) %>% 
+  # This function is for renaming variables
+  rename("League" = "lgID",
+         "Year" = "yearID",
+         "Team" = "name")
+```
+
+## Factor Variables
+
+Factor variables represent categorical data. This includes pitch type in baseball (FB, CU, CH, etc.), play type in football (run or pass), shot value in basketball (FT, 2s, 3s), and many more. For this analysis, we want to make league a factor variable since there might be differences in the number of homeruns hit by a team in the AL compared to the NL due to the DH rule.
+
+```{r factors}
+teams$League <- factor(teams$League,
+                     levels = c("AL", "NL"))
+
+# You can check this by looking at
+# str(teams)
+```
+
+## Creating the Model
+
+Creating a linear model is actually very simple:
+
+```{r LSR}
+# Fit First Order Linear Models
+lsrModel <- lm(W ~ HR, 
+               data = teams)
+```
+
+As you can see, the variable to the left of the tilde (~) is the one that we want to be predicting or our *response variable*, while the variables on the right are our predictors or *explanatory variables*. Then we need to specify what data set we are fitting the model from by using the `data = ` argument. If you don't want to use the `data = ` argument, you could write `lsrModel <- lm(teams$W ~ teams$HR)` and get the same output. If we wanted to use multiple predictors, we would do so using a + between predictors.
+
+\newpage
+
+## Plotting
+
+Plotting the result of a linear model is easy in Base R. You plot as a normal scatterplot and then add an abline with the model as the argument as the code below demonstrates.
+
+```{r LSR_results_Base_R}
+# Plotting in Base R
+plot(teams$HR, teams$W)
+abline(lsrModel, col = "red")
+```
+
+In ggplot, this is more complicated. You must add a smoother and change the `method = ` argument to `method = "lm`.
+
+```{r LSR_results_ggplot}
+# Plotting using ggplot
+ggplot(teams, aes(x = HR, y = W)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "red")
+```
+
+## Other Results
+
+There are other things that you may want to do with your linear model such as look at a summary or an ANOVA table of the results. We will discuss those below with a new model that we create:
+
+```{r withLeague}
+lsrModel2 <- lm(W ~ HR + League, 
+               data = teams)
+
+summary(lsrModel2)
+```
+
+By doing the `summary()` function around our model, we get estimates for our intercept and slope parameters. Let's interpret what this means. Our regression equation is as follows:
+
+$E(W) = 62.75557 + 0.09963*HR + 0.94472*I(League = NL)$
+
+The first thing you may notice is that our output says `LeagueNL` but we didn't have a variable called `LeagueNL`, only one called `League`. If you remember, we created `League` to be a factor variable with 2 levels: AL and NL. In this case, League is an *Indicator Variable* or a *One-Hot Variable* (among other names) where if the condition given is TRUE, it is recorded as a 1. If the condition is FALSE, it is recorded as a 0. These are called "Indicator Variables" because `LeagueNL` *indicates* whether `League = NL` is TRUE or not. The name *One-Hot Variable* comes from the fact that only *one* condition can *hot* at a time (for example, a team cannot be in both the AL and the NL at the same time). Indicator variables can also take more than two values such as "Par 3", "Par 4", "Par 5" in golf.
+
+Moving on, the first number is our intercept. This is the value we expect if all of our numeric variables (in this case just `HR`) are 0 and all of our Indicator Variables/One Hot Variables (in this case just `LeagueNL`) are FALSE/0/Not Hot. For this specific example, an appropriate interpretation would be as follows:
+
+"Given that a team hits 0 homeruns in a season and is in the American League, the team is expected to win about 62.75557 games."
+
+According to the model this statement is true, however realistically this doesn't make too much sense. We will discuss this later.
+
+Finally, the last coefficient we want to look at is the number in front of `HR`.  A correct interpretation of this coefficient would be as follows:
+
+"For every additional Homerun that a team hits, they are expected to win 0.09963 more games *given that all other variables remain constant*."
+
+The italicized phrase is very important when articulating what exactly this coefficient means.
+
+By looking under the column $Pr(>|t|)$, we get the significance values from our hypothesis. An easy way to check for significance, look for \*s next to these p-values. If there is at least \* next the p-value, it is significant at the $\alpha = 0.05$ significance level. In our output above, the `HR` variable is significant while `League` is not.
+
+You can also look at the Multiple R-squared and Adjusted R-squared values. The closer these are to 1, the better your model fits the data. This is a very weak model with $R^2 = .1139$. Referring back to earlier, this makes sense. We wouldn't expect a team with 0 homeruns to win 63 games would we? There are likely better predictors to be used for predicting the number of wins a team has.
+
+# Conclusion
+
+Linear Regression is only 1 type of model that we can make and we barely even covered some basics of this. If you are interested in learning about other modeling techniques in R, I recommend that you looks up the `tidymodels` package as well as the *Introduction to Statistical Learning in R* book which has a free pdf availble online.
