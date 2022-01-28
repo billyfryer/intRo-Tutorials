@@ -12,7 +12,7 @@ intRo 4- R Markdown.Rmd: This file is an introduction to R Markdown, primarily m
 
 intRo 5- Modeling.Rmd: This file explains the basics of creating a Linear Model in R using the `lm()` fucntion. Plotting of the model as well as interpretation of coefficients is also covered.
 
-log regression.R - This a very quick tutorial I threw together to present on 1/31/2022 at Sports Analytics Club at NC State. We cover logistic regression and linear regression using the hoopR package.
+log regression.R - This a very quick tutorial I threw together to present on 1/31/2022 at Sports Analytics Club at NC State. We cover logistic regression and linear regression using the hoopR package. I intend on replacing intRo 5- Modeling.Rmd with this eventually.
 
 I want to give a special thanks to Graham Pash and Jason Thompson for creating the original intRo tutorial whose contents are spread throughout the tutorials.
 
