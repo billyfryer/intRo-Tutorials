@@ -50,7 +50,7 @@ new_full_pbp <- full_pbp %>%
 
 # NC State vs Nebraska
 new_pbp <- new_full_pbp %>% 
-  filter(game_id == 401370097) %>% 
+  filter(game_id == 401370106) %>% 
   mutate(new_win_prob = 2*pred_win_prob - 1)
 
 # Win Probability Chart
@@ -61,7 +61,7 @@ ggplot(new_pbp, aes(x = game_play_number,
   labs(x = "# Plays into Game",
        y = "Win Probability of Home Team",
        title = "Basic Win Probability Model",
-       subtitle = "NCSU vs Nebraska MBB 2021",
+       subtitle = "NCSU vs Virginia MBB 2021",
        caption = "Created by Billy Fryer ~ Data from hoopR package") +
   theme_classic() +
   theme(plot.title = element_text(hjust = 0.5),
@@ -75,7 +75,7 @@ ggplot(new_pbp, aes(x = game_play_number,
   labs(x = "# Plays into Game",
        y = "Predicted Win Margin",
        title = "Predicted Win Margin by Home Team",
-       subtitle = "NCSU vs Nebraska MBB 2021",
+       subtitle = "NCSU vs Virgina MBB 2022",
        caption = "Created by Billy Fryer ~ Data from hoopR package") +
   theme_classic() +
   theme(plot.title = element_text(hjust = 0.5),
